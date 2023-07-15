@@ -1,10 +1,11 @@
-Install kubernetes 1.26 on ubuntu 22.04
+# Install kubernetes 1.26 on ubuntu 22.04
 
 These steps should be run on all servers (master and worker)
 
 disable swap on all server
 
 ```
+
 vim /etc/fstab --> delete all swap line
 swapoff -a
 
