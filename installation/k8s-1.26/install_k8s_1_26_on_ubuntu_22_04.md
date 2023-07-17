@@ -1,6 +1,6 @@
 # Install kubernetes 1.26 on ubuntu 22.04
 
-![Install kubernetes](/assets/Install_kubernetes.png)
+![Install kubernetes](/assets/install_kubernetes.png)
 
 These steps should be run on all servers (master and worker)
 
