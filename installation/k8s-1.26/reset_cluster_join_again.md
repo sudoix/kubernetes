@@ -1,5 +1,7 @@
 # Reset cluster
 
+![reset_cluster_join_again](/assets/reset_cluster_join_again.png)
+
 If you use a private IP for `apiserver-advertise-address`, you won't be able to access the cluster from outside. To allow access from outside, follow these steps:
 
 To reset your Kubernetes cluster, follow these steps:
@@ -38,3 +40,7 @@ kubeadm token create --print-join-command
 ```
 
 The join command will be printed and can be used to add worker nodes to your cluster.
+
+#### For install `kubectl` follow the link
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
