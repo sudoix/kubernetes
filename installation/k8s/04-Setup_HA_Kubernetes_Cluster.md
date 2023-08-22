@@ -1,3 +1,6 @@
+![Setup_HA_Kubernetes_Cluster](/assets/Setup_HA_Kubernetes_Cluster.png)
+
+
 # Set up a Highly Available Kubernetes Cluster
 
 ## Set up load balancer node
