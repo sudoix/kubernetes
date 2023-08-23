@@ -3,8 +3,14 @@
 
 # Set up a Highly Available Kubernetes Cluster
 
+## Before you start you should follow these step
+
+[Preinstall of k8s cluster](01-install_k8s_1_26_on_ubuntu_22_04.md)
+[Init cluster](01-master_node.md)
+
 ## Set up load balancer node
 ##### Install Haproxy
+
 ```
 apt update && apt install -y haproxy
 ```
