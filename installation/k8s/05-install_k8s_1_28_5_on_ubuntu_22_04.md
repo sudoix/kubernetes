@@ -76,12 +76,26 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt install -y kubeadm=1.28.5-1.1 kubelet=1.28.5-1.1 kubectl=1.28.5-1.1
 ```
 
+Pull image
+
+```
+kubeadm config images pull
+```
+
+Init cluster (Use this for cluster without HAProxy)
+
+```
+kubeadm init --control-plane-endpoint YOURDOMAINADDRESS --apiserver-advertise-address=YOURDOMAINADDRESS --pod-network-cidr=192.168.0.0/16 >> /root/kubeinit.log
+```
+
 Update `/etc/hosts/`
 
 ```
 cat >>/etc/hosts<<EOF
 172.16.0.100   km1.sudoix.com    km1
 172.16.0.200   kw1.sudoix.com    kw1
+YOURLOADBALANCER OR YOUR CONTROLPLAIN NODE     YOUR DOMAIN 
+172.16.0.250   espenu.sudoix.com
 EOF
 ```
 
