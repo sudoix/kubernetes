@@ -1,4 +1,4 @@
-# Install kubernetes 1.26 on ubuntu 22.04
+# Install kubernetes 1.28  on ubuntu 22.04
 
 ![Install kubernetes](/assets/install_kubernetes.png)
 
@@ -82,12 +82,6 @@ Pull image
 kubeadm config images pull
 ```
 
-Init cluster (Use this for cluster without HAProxy)
-
-```
-kubeadm init --control-plane-endpoint YOURDOMAINADDRESS --apiserver-advertise-address=YOURDOMAINADDRESS --pod-network-cidr=192.168.0.0/16 >> /root/kubeinit.log
-```
-
 Update `/etc/hosts/`
 
 ```
@@ -98,6 +92,66 @@ YOURLOADBALANCER OR YOUR CONTROLPLAIN NODE     YOUR DOMAIN
 172.16.0.250   espenu.sudoix.com
 EOF
 ```
+
+Init cluster (Use this for cluster without HAProxy)
+
+```
+kubeadm init --control-plane-endpoint YOURDOMAINADDRESS --apiserver-advertise-address=YOURDOMAINADDRESS --pod-network-cidr=192.168.0.0/16 >> /root/kubeinit.log
+```
+
+
+### Deploy calico network 
+
+```bash 
+kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml"
+
+kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml"
+```
+
+## Join master and worker node
+
+Create token
+
+```bash
+kubeadm init phase upload-certs --upload-certs
+```
+
+the output is like this:
+
+```
+I0125 13:38:37.766038   14000 version.go:256] remote version is much newer: v1.29.1; falling back to: stable-1.28
+[upload-certs] Storing the certificates in Secret "kubeadm-certs" in the "kube-system" Namespace
+[upload-certs] Using certificate key:
+3b71eb763e8fb5e62176b325b269ca378272f526eb1179d47fd7afe20350a63b
+```
+
+Create join command
+
+```bash
+kubeadm token create --print-join-command
+```
+
+The output is like this:
+
+```
+kubeadm join espenu.sudoix.com:6443 --token hcga4r.m2ewj8ktnp82pp98 --discovery-token-ca-cert-hash sha256:3ebf2cf03c9d1aef491576a4dd966edacdbd3ab6617d68d7d06fcd73c9d8c00d
+```
+
+#### For master node 
+
+```bash
+kubeadm join espenu.sudoix.com:6443 --token hcga4r.m2ewj8ktnp82pp98 --discovery-token-ca-cert-hash sha256:3ebf2cf03c9d1aef491576a4dd966edacdbd3ab6617d68d7d06fcd73c9d8c00d --control-plane --certificate-key=3b71eb763e8fb5e62176b325b269ca378272f526eb1179d47fd7afe20350a63b --cri-socket=unix:///var/run/containerd/containerd.sock
+```
+
+#### For worker node
+
+Just run print join command on your worker node
+
+```bash
+kubeadm join espenu.sudoix.com:6443 --token hcga4r.m2ewj8ktnp82pp98 --discovery-token-ca-cert-hash sha256:3ebf2cf03c9d1aef491576a4dd966edacdbd3ab6617d68d7d06fcd73c9d8c00d
+```
+
+
 
 https://v1-28.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
