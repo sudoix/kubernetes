@@ -8,7 +8,7 @@ This documentation guides you in setting up a cluster with three master nodes, o
 ### Virtual IP managed by Keepalived on the load balancer nodes
 |Virtual IP|
 |----|
-|172.16.0.88|
+|172.16.100.100|
 
 
 ## Set up load balancer nodes (lb1 & lb2)
@@ -29,8 +29,8 @@ errorExit() {
 }
 
 curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
-if ip addr | grep -q 172.16.0.88; then
-  curl --silent --max-time 2 --insecure https://172.16.0.88:6443/ -o /dev/null || errorExit "Error GET https://172.16.0.88:6443/"
+if ip addr | grep -q 172.16.100.100; then
+  curl --silent --max-time 2 --insecure https://172.16.100.100:6443/ -o /dev/null || errorExit "Error GET https://172.16.100.100:6443/"
 fi
 
 chmod +x /etc/keepalived/check_apiserver.sh
@@ -61,7 +61,7 @@ vrrp_instance VI_1 {
         auth_pass mysecret
     }
     virtual_ipaddress {
-        172.16.0.88
+        172.16.100.100
     }
     track_script {
         check_apiserver
