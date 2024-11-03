@@ -1,4 +1,4 @@
-# Install kubernetes 1.26 on ubuntu 22.04
+# Install kubernetes 1.30 on ubuntu 24.04
 
 ![Install kubernetes](/assets/install_kubernetes.png)
 
@@ -48,6 +48,7 @@ sysctl --system
 ```
 
 Install containerd
+https://v1-30.docs.kubernetes.io/docs/setup/production-environment/container-runtimes/#systemd-cgroup-driver
 
 ```
 apt update
@@ -67,11 +68,18 @@ systemctl enable containerd
 ```
 
 Add repository for kubernetes
+See here: https://v1-30.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 ```
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-apt install -y kubeadm=1.26.0-00 kubelet=1.26.0-00 kubectl=1.26.0-00
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+apt-cache policy search kubeadm
+
+apt install -y kubeadm=1.30.6-1.1 kubelet=1.30.6-1.1 kubectl=1.30.6-1.1
+sudo systemctl enable --now kubelet
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 Update `/etc/hosts/`
